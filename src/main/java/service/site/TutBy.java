@@ -17,8 +17,7 @@ public class TutBy implements ContainerRecords {
 	private int currentPage;
 	private int processedLinks;
 
-	private String request = "http://jobs.tut.by/search/vacancy?text="
-			+ "&only_with_salary=false&area=1002&enable_snippets=true&clusters=true&salary=&search_period=1&items_on_page=100&page=";
+	private String request = "http://jobs.tut.by/search/vacancy?text=&search_period=&items_on_page=80&page=";
 
 	private String userAgent = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 "
 			+ "(KHTML, like Gecko) Chrome/45.0.2454.101 Safari/537.36";
@@ -37,9 +36,9 @@ public class TutBy implements ContainerRecords {
 		try {
 			while (true) {
 				try {
-
+					
 					Document doc = Jsoup.connect(request + currentPage)
-							.userAgent(userAgent).get();
+							.userAgent(userAgent).timeout(5000).get();
 
 					Elements elements = doc.select("a");
 
@@ -48,7 +47,7 @@ public class TutBy implements ContainerRecords {
 						String title = elem.html();
 						String url = elem.absUrl("href");
 
-						if (url.contains("http://jobs.tut.by/vacancy")) {
+						if (title.contains("курс") && url.contains("http://jobs.tut.by/vacancy")) {
 							processedLinks++;
 							if (records.containsKey(title)) {
 								records.get(title).add(url);

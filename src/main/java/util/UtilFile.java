@@ -52,6 +52,7 @@ public class UtilFile {
 			
 			writer.write(ENDHTML);
 		writer.close();
+		System.out.println(new File("").getCanonicalPath()+"/"+line);
 	}
 		
 }	
