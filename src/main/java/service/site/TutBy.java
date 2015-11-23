@@ -3,8 +3,9 @@ package service.site;
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -17,17 +18,22 @@ public class TutBy implements ContainerRecords {
 	private int currentPage;
 	private int processedLinks;
 
-	private String request = "http://jobs.tut.by/search/vacancy?text=&search_period=&items_on_page=80&page=";
+	private String request = "http://jobs.tut.by/search/vacancy?text=&items_on_page=100";
 
 	private String userAgent = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 "
 			+ "(KHTML, like Gecko) Chrome/45.0.2454.101 Safari/537.36";
 
-	public TutBy(HashMap<String, String> hashMap) {
-
+	public TutBy(Map<String, String> hashMap) {
+		StringBuilder bulder = new StringBuilder(request);
+		for(Entry<String, String> en:hashMap.entrySet()){
+			
+			bulder.append("&").append(en.getKey()).append("=").append(en.getValue());
+			
+		}
+		bulder.append("&page=");
+		request = bulder.toString();
 		processedLinks = 0;
 		currentPage = 0;
-		
-
 	}
 
 	public HashMap<String, ArrayList<String>> getRecorder() {
@@ -47,7 +53,7 @@ public class TutBy implements ContainerRecords {
 						String title = elem.html();
 						String url = elem.absUrl("href");
 
-						if (title.contains("курс") && url.contains("http://jobs.tut.by/vacancy")) {
+						if ( url.contains("http://jobs.tut.by/vacancy")) {
 							processedLinks++;
 							if (records.containsKey(title)) {
 								records.get(title).add(url);
