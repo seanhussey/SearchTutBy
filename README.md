@@ -1,5 +1,5 @@
 # SearchTutBy
-This program searches all offeres recieved during a day on tut.by.
+This program searches all offers received during a day on tut.by.
 
 it creates file with links and you go fast by links
 
